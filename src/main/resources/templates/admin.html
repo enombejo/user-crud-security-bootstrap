@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <title>Admin</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <span class="navbar-text" th:text="${principal.getEmail()} +' With role: ' + ${principal.getRoles()}">
+            Navbar text
+            
+          </span>
+        </li>
+        
+      </ul>
+      <ul class="navbar-nav">
+        <li>
+          <a class="nav-link" th:href="@{/logout}">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+<!--  style="margin-top:40px"-->
+  <div class="container-fluid" >
+    <div class="row">
+<!--      style="margin-top:20px"-->
+      <div class="container col-md-2" >
+        <div class="container">
+
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin">Admin</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user">User</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+
+      <div class="container mt-3 col-md-10 bg-light">
+        <h2>Admin panel</h2>
+        <br>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#home">Users table</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#menu1">New user</a>
+          </li>
+        </ul>
+
+        <!-- Таблица всех пользователей -->
+        <div class="tab-content">
+          <div id="home" class="container tab-pane active"><br>
+            <h3>All users</h3>
+            <div class="container mt-3">
+             
+              
+              <table class="table table-striped bg-white">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Ago</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+
+                <tbody id="myTable">
+                  <th:block th:each="user : ${users}">
+                  <tr>
+                    <td th:text="${user.getId()}"></td>
+                    <td th:text="${user.getFirstName()}">John</td>
+                    <td th:text="${user.getLastName()}">Doe</td>
+                    <td th:text="${user.getAgo()}"></td>
+                    <td th:text="${user.getEmail()}">john@example.com</td>
+                    <td th:text="${user.getRoles()}"></td>
+                    <td>
+                      <!-- Изменение user -->
+                      <div class="container">
+                        <!-- Button to Open the Modal -->
+                        <button type="button" class="btn btn-info" data-toggle="modal" th:data-target="'#editUser' + ${user.getId()}">
+                          Edit
+                        </button>
+
+                        <!-- The Modal id="editUser" -->
+                        <div class="modal fade" th:id="'editUser' + ${user.getId()}">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                              <!-- Modal Header -->
+                              <div class="modal-header">
+                                <h4 class="modal-title">Edit user</h4>
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                              </div>
+
+                              <!-- Modal body -->
+                              <div class="modal-body">
+                                <form method="post" th:id="'data-edit' + ${user.getId()}" >
+                                  <label>ID</label>
+                                  <input th:value="${user.getId()}" type="number" name="id" class="form-control" readonly>
+                                  <label>Firstname</label>
+                                  <input th:value="${user.getFirstName()}" name="firstName" class="form-control">
+                                  <label>Lastname</label>
+                                  <input th:value="${user.getLastName()}" name="lastName" class="form-control">
+                                  <label>Ago</label>
+                                  <input th:value="${user.getAgo()}" type="number" name="ago" class="form-control">
+                                  <label>Email</label>
+                                  <input th:value="${user.getEmail()}" type="email" name="email" class="form-control">
+                                  <label>Password</label>
+                                  <input th:value="${user.getPassword()}" type="text" name="password" class="form-control">
+                                  <label>Roles</label>
+                                  <select multiple class="form-control"  name="roles">
+                                    <option>ROLE_ADMIN</option>
+                                    <option>ROLE_USER</option>
+                                  </select>
+                                </form>
+                              </div>
+
+                              <!-- Modal footer -->
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+<!--                                data-dismiss="modal"-->
+                                <button type="submit" formaction="/admin/update" class="btn btn-primary" th:form="'data-edit' + ${user.getId()}">Edit</button>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </td>
+                    <td>
+                      <!--Удалление user-->
+                      <div class="container">
+                        <!-- Button to Open the Modal -->
+                        <button type="button" class="btn btn-danger" data-toggle="modal" th:data-target="'#deleteUser' + ${user.getId()}">
+                          Delete
+                        </button>
+
+                        <!-- The Modal -->
+                        <div class="modal fade" th:id="'deleteUser' + ${user.getId()}">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                              <!-- Modal Header -->
+                              <div class="modal-header">
+                                <h4 class="modal-title">Delete user</h4>
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                              </div>
+
+                              <!-- Modal body -->
+                              <div class="modal-body">
+                                <form method="post" th:id="'delete-user' + ${user.getId()}" action="/admin/delete">
+                                  <label>ID</label>
+                                  <input th:value="${user.getId()}" type="number" name="id" class="form-control" readonly>
+                                  <label>Firstname</label>
+                                  <input th:value="${user.getFirstName()}" name="firstName" class="form-control" disabled>
+                                  <label>Lastname</label>
+                                  <input th:value="${user.getLastName()}" name="lastName" class="form-control" disabled>
+                                  <label>Ago</label>
+                                  <input th:value="${user.getAgo()}" type="number" name="ago" class="form-control" disabled>
+                                  <label>Email</label>
+                                  <input th:value="${user.getEmail()}" type="email" name="email" class="form-control" disabled>
+                                  <label>Password</label>
+                                  <input th:value="${user.getPassword()}" type="text" name="password" class="form-control" disabled>
+                                </form>
+                              </div>
+
+                              <!-- Modal footer -->
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger" th:form="'delete-user' + ${user.getId()}">Delete</button>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </td>
+                  </tr>
+                </th:block>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+
+
+        <div id="menu1" class="container tab-pane fade"><br>
+          <h3>Add new user</h3>
+          <form id="add-user" method="post" action="/admin/add">
+            <label>Firstname</label>
+            <input name="firstName" class="form-control">
+            <label>Lastname</label>
+            <input name="lastName" class="form-control">
+            <label>Ago</label>
+            <input type="number" name="ago" class="form-control">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control">
+            <label for="exampleFormControlSelect1">Example select</label>
+            <select multiple class="form-control" id="exampleFormControlSelect1" name="roles">
+              <option>ROLE_ADMIN</option>
+              <option>ROLE_USER</option>
+            </select>
+            <div>
+              <button type="submit" class="btn btn-success">Add new user</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

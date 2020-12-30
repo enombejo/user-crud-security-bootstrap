@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+	<title>User information</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<span class="navbar-text" th:text="${principal.getEmail()} +' With role: ' + ${principal.getRoles()}">
+						Navbar text
+
+					</span>
+				</li>
+
+			</ul>
+			<ul class="navbar-nav">
+				<li>
+					<a class="nav-link" th:href="@{/logout}">Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+
+
+
+
+	<!--<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+
+		<!-- Navbar text--
+		<span class="navbar-text" th:text="${principal.getEmail()} +' With role: ' + ${principal.getRoles()}">
+			Navbar text
+			
+		</span>
+		<div class="navbar-collapse collapse pull-right">
+			<span class="navbar-text">
+				<a class="nav-link" th:href="@{/logout}">Logout</a>
+			</span>
+		</div>
+				<!-- Links --
+		<!--<ul class="navbar-nav nav">
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 2</a>
+				<a class="nav-link text-right" th:href="@{/logout}">Logout</a>
+			</li>
+		</ul>--
+	</nav>-->
+
+
+
+
+
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="container col-md-2">
+				<div class="container">
+
+					<ul class="nav nav-pills flex-column">
+						<li class="nav-item">
+							<a class="nav-link active" href="/user">User</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- Таблица пользователя -->
+			<div class="container col-md-10 bg-light">
+				<div class="container tab-pane active"><br>
+					<h2>User information-page</h2>
+					<div class="container mt-3">
+						<h3>About user</h3>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Firstname</th>
+									<th>Lastname</th>
+									<th>Ago</th>
+									<th>Email</th>
+									<th>Role</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td th:text="${user.getId()}"></td>
+									<td th:text="${user.getFirstName()}">John</td>
+									<td th:text="${user.getLastName()}">Doe</td>
+									<td th:text="${user.getAgo()}"></td>
+									<td th:text="${user.getEmail()}">john@example.com</td>
+									<td th:text="${user.getRoles()}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
